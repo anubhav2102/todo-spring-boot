@@ -1,0 +1,10 @@
+.createNewTaskButton{
+    background-color: #6b6bf7;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 7px;
+    width: 14rem;
+    font-size: 20px;
+    cursor: pointer;
+}
