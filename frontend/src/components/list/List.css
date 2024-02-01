@@ -8,3 +8,28 @@
     font-size: 20px;
     cursor: pointer;
 }
+.createTaskDiv{
+    position: "fixed"; 
+    height: "35%"; 
+    width: "50%";
+    border-radius: "10px";
+    left: "25%";
+    top: "22%";
+    z-index: 999; 
+    background: "white";
+    box-shadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)";
+    margin: "10px";
+    padding: "10px";
+}
+.createTaskOuterDiv{
+    position: "fixed";
+    height: "100%";
+    width:"100%";
+    background:"rgb(115 111 111 / 50%)";
+    z-index:9;
+    top:"0";
+    left:"0";
+}
+.filter_first:hover, .filter_second:hover{
+    background: white;
+}
