@@ -115,7 +115,7 @@ const Table = ({tableData, editTask}) => {
     return (
         <div>
             <div style={{display: "flex", justifyContent: "center", height: '60vh'}}>
-                <table style={{width: "80vw", height: "40vh",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px -1px 0 rgba(0, 0, 0, 0.19)"}}>
+                <table style={{width: (window.innerWidth>760)?"80vw":"97vw", height: "40vh",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px -1px 0 rgba(0, 0, 0, 0.19)"}}>
                     <thead>
                         <tr>
                             {
@@ -123,7 +123,7 @@ const Table = ({tableData, editTask}) => {
                                     return (
                                     <td key={idx} style={{width: auto['width'], textAlign: 'center', fontWeight: '600', height: '50px', background: '#c6e1d3',boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
                                         <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                                        <span>
+                                        <span style={{fontSize: (window.innerWidth<760) ? "13px":"15px"}}>
                                         {auto['name']}
                                         </span>
                                         {
@@ -152,7 +152,7 @@ const Table = ({tableData, editTask}) => {
                                                 <td key={index} style={{width: auto['width'], textAlign: 'center', background: 'aliceblue',boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
                                                     {
                                                         (auto.key==='actions') && (
-                                                            <div>
+                                                            <div style={{display: "flex", justifyContent: "center"}}>
                                                                 <span style={{marginRight: '7px'}}>
                                                                 {
                                                                     (item['status']!=='completed') && (
@@ -167,28 +167,28 @@ const Table = ({tableData, editTask}) => {
                                                     }
                                                     {
                                                         (auto.key==='duedate') && (
-                                                            <div style={{color: getColor(item[auto.key], item)}}>
+                                                            <div style={{color: getColor(item[auto.key], item), fontSize: (window.innerWidth < 760) ? "12px" : "17px"}}>
                                                                 {item[auto.key]}
                                                             </div>
                                                         )
                                                     }
                                                     {
                                                         (auto.key==='status') && (
-                                                            <div style={{color: (item[auto.key]==='completed') ? "blue" : "black"}}>
+                                                            <div style={{color: (item[auto.key]==='completed') ? "blue" : "black", fontSize: (window.innerWidth < 760) ? "13px" : "17px"}}>
                                                                 {item[auto.key]}
                                                             </div>
                                                         )
                                                     }
                                                     {
                                                         (auto.key==='description') && (
-                                                            <div>
+                                                            <div style={{fontSize: (window.innerWidth < 760) ? "13px" : "17px"}}>
                                                                 {item[auto.key]}
                                                             </div>
                                                         )
                                                     }
                                                     {
                                                         (auto.key==='task') && (
-                                                            <div>
+                                                            <div style={{fontSize: (window.innerWidth < 760) ? "13px" : "17px"}}>
                                                                 {item[auto.key]}
                                                             </div>
                                                         )
