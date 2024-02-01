@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const TaskForm = ({closeCreateTaskModal, savingData}) => {
+const TaskForm = ({closeCreateTaskModal, savingData, updateTask}) => {
     const [title,setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [duedate, setDuedate] = useState('');
@@ -17,28 +17,52 @@ const TaskForm = ({closeCreateTaskModal, savingData}) => {
             'description': description,
             'duedate': duedate
         };
+        console.log(updateTask)
+        if(updateTask.duedate){
+            console.log(updateTask)
+            obj['updated'] = true;
+            obj['index'] = updateTask.index;
+        }
         savingData(obj);
         handleClose();
     }
+    useEffect(()=>{
+        if( Object.keys(updateTask) != []){
+            console.log(Object.keys(updateTask));
+            console.log(updateTask)
+        setTitle(updateTask.task);
+        setDescription(updateTask.description);
+        console.log(updateTask.duedate);
+        if(updateTask.duedate){
+            const dateString = updateTask.duedate;
+            const [day, month, year] = dateString.split('/').map(Number);
+
+            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            console.log(formattedDate);
+        setDuedate(formattedDate);
+        }
+        }
+    },[updateTask])
     return (
         <div>
             <form style={{display: "flex", height: "23vh", width: "50vw", justifyContent: "space-evenly", alignItems: "center"}}>
                 <label htmlFor="title" style={{display:"flex", flexDirection: "column"}}>
                    <span style={{fontWeight: "500", marginBottom: "5px", fontSize: "11px", fontFamily: "Arial, sans-serif"}}> Title</span>  
                    <span>
-                    <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} placeholder="Enter title" type="text" onChange={(e)=>setTitle(e.target.value)} />
+                    <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} value={title} placeholder="Enter title" type="text" onChange={(e)=>setTitle(e.target.value)} />
                    </span>
                 </label>
                 <label htmlFor="description" style={{display:"flex", flexDirection: "column"}}>
                    <span style={{fontWeight: "500", marginBottom: "5px", fontSize: "11px", fontFamily: "Arial, sans-serif"}}> Description</span>  
                    <span>
-                    <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} placeholder="Enter description" type="text" onChange={(e)=>setDescription(e.target.value)} />
+                    <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} value={description} placeholder="Enter description" type="text" onChange={(e)=>setDescription(e.target.value)} />
                     </span>
                 </label>
                 <label htmlFor="due_date" style={{display:"flex", flexDirection: "column"}}>
                     <span style={{fontWeight: "500", marginBottom: "5px", fontSize: "11px", fontFamily: "Arial, sans-serif"}}>Due Date</span>  
                     <span>
-                        <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} type="date" onChange={(e)=>setDuedate(e.target.value)} />
+                        <input style={{outline: "none", padding: "6px", borderRadius: "5px", border: "1px solid lightgrey"}} value={duedate} type="date" onChange={(e)=>setDuedate(e.target.value)} />
                     </span>
                 </label>
             </form>
