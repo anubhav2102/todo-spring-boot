@@ -19,7 +19,7 @@ import com.example.springboottodoapplication.services.TodoItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://leap-todo.netlify.app/")
 public class TodoItemController {
     @GetMapping("/ping")
     public String ping() {
