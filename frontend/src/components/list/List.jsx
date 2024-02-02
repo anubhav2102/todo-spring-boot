@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./List.css";
 import Table from "./Table.jsx";
 import CreateTask from "./CreateTask.jsx";
+import axios from "axios"
 
 const List = () => {
     const [showCreateTask, setShowCreateTask] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const [updateTask, setUpdateTask] = useState({});
-    const [data, setData] = useState([
-        {'task': 'abc','description':'def','status':'completed','duedate':"23/03/2023"},
-        {'task': 'abc','description':'def','status':'completed','duedate':'28/01/2024'},
-        {'task': 'abc','description':'def','status':'open','duedate':'25/01/2023'},
-        {'task': 'abc','description':'def','status':'completed','duedate':'29/03/2024'},
-        {'task': 'abc','description':'def','status':'open','duedate':'24/02/2024'}
-    ]);
+    const [data, setData] = useState([]);
     const openCreateTaskModal = () => {
         setShowCreateTask(true);
     }
@@ -32,20 +27,42 @@ const List = () => {
 
         return formattedDate;
     }
-    const handleNewTask = (e) => {
+    const handleNewTask = async(e) => {
         console.log(e);
-        e.duedate = convertDate(e.duedate);
+        e.dueDate = convertDate(e.dueDate);
         if(e.updated){
             let vol = data;
             vol[e.index] = {
-                'task': e.title,'description':e.description,'status':'open','duedate':e.duedate
+                'task': e.title,'description':e.description,'status':'open','dueDate':e.dueDate
             };
-            setData(vol);
+            let response = await axios.put(`http://localhost:8080/api/update-task/${e.id}`,{
+                'task': e.title,'description':e.description,'status':'open','dueDate':e.dueDate
+            })
+            console.log(response);
+            try {
+                let data = await axios.get("http://localhost:8080/api/all-tasks");
+                if(data.data){
+                    setData(data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }else{
-            let obj = {'task': e.title,'description':e.description,'status':'open','duedate':e.duedate};
+            let obj = {'task': e.title,'description':e.description,'status':'open','dueDate':e.dueDate};
             let val = data.push(obj);
             console.log(data, val);
-            setData(data);
+            let response = await axios.post("http://localhost:8080/api/create-task",{
+                'task': e.title,'description':e.description,'status':'open','dueDate':e.dueDate
+            })
+            console.log(response);
+            try {
+                let data = await axios.get("http://localhost:8080/api/all-tasks");
+                if(data.data){
+                    setData(data.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
     const checkDateStatus = (dateString) => {
@@ -56,7 +73,7 @@ const List = () => {
     const sortRows = (mode, columnName) => {
         let sortedData = [...data];
     
-        if (columnName === 'duedate') {
+        if (columnName === 'dueDate') {
             sortedData.sort((a, b) => {
                 const dateA = checkDateStatus(a[columnName]);
                 const dateB = checkDateStatus(b[columnName]);
@@ -93,6 +110,19 @@ const List = () => {
         sortRows('asc',x);
         x = '';
     }
+    useEffect(()=>{
+            const callFunc = async ()=>{
+                try {
+                    let data = await axios.get("http://localhost:8080/api/all-tasks");
+                    if(data.data){
+                        setData(data.data);
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            callFunc()
+    },[]);
     return (
         <div>
             <div>
@@ -110,7 +140,7 @@ const List = () => {
                             </div>
                             <div style={{display: "flex", flexDirection: "column", height: "13vh", justifyContent: "space-evenly"}}>
                                 <span onClick={()=>handleFilter('status')} style={{fontSize: "14px", cursor: "pointer", padding: "7px"}} className="filter_first">Completion Status</span>
-                                <span onClick={()=>handleFilter('duedate')} style={{fontSize: "14px", cursor:"pointer", padding: "7px"}} className="filter_second">Due Date (Earliest First)</span>
+                                <span onClick={()=>handleFilter('dueDate')} style={{fontSize: "14px", cursor:"pointer", padding: "7px"}} className="filter_second">Due Date (Earliest First)</span>
                             </div>
                         </div>
                     </div>

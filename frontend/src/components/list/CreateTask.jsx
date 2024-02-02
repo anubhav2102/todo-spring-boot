@@ -14,7 +14,6 @@ const CreateTask = ({closeCreateTaskModal, savedTask, updateTask}) => {
         savedTask(e);
     }
     useEffect(()=>{
-        console.log(updateTask)
         setEditTask(updateTask)
     },[updateTask])
     return(
@@ -23,7 +22,7 @@ const CreateTask = ({closeCreateTaskModal, savedTask, updateTask}) => {
                 <div style={{flex: "0.1"}}></div>
                 <div style={{flex: (window.innerWidth>760) ? "0.4":"0.9"}}>
                     {
-                        !updateTask.duedate ? (
+                        !updateTask.dueDate ? (
                             <h1 style={{fontSize:(window.innerWidth>760)?'30px':'25px'}}>Create New Task</h1>
                         ) : (
                             <h1 style={{fontSize:(window.innerWidth>760)?'30px':'25px'}}>Update Task</h1>

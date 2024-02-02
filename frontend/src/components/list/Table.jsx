@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios"
 
 const Table = ({tableData, editTask}) => {
     const [data, setData] = useState([]);
@@ -11,14 +12,13 @@ const Table = ({tableData, editTask}) => {
             parsedDate = parsedDate.toString();
             // return false;
         }
-        console.log(parsedDate)
         return new Date() > parsedDate;
     }
     const updateTask = (task ,index) => {
         console.log(task, index)
         editTask(task,index);
     }
-    const markAsCompleted = (e) => {
+    const markAsCompleted = async (e) => {
         console.log(e)
         for(let i=0;i<data.length;i++){
             if(data[i]===e){
@@ -26,10 +26,18 @@ const Table = ({tableData, editTask}) => {
                 break;
             }
         }
-        console.log(data);
+        if(e.id){
+            let response = await axios.put(`http://localhost:8080/api/update-task/${e.id}`,{
+                'task': e.task,'description':e.description,'status':'completed','dueDate':e.dueDate
+            });
+            console.log(response);
+            window.location.reload();
+        }else{
+            console.error('issue in completing task');
+        }
         setData(data);
     }
-    const deleteTask = (e) => {
+    const deleteTask = async (e) => {
         let idx = -1;
         for(let i=0;i<data.length;i++){
             if(data[i]===e){
@@ -38,7 +46,14 @@ const Table = ({tableData, editTask}) => {
             }
         }
         data.splice(idx, 1);
-        console.log(data);
+        console.log(e);
+        if(e.id){
+            let response = await axios.delete(`http://localhost:8080/api/delete-task/${e.id}`);
+            console.log(response)
+            window.location.reload();
+        }else{
+            console.error('issue in deleting task')
+        }
         setData(data);
     }
     const getColor = (e,f) => {
@@ -58,7 +73,7 @@ const Table = ({tableData, editTask}) => {
     const sortRows = (mode, columnName) => {
         let sortedData = [...data];
     
-        if (columnName === 'duedate') {
+        if (columnName === 'dueDate') {
             sortedData.sort((a, b) => {
                 const dateA = checkDateStatus(a[columnName]);
                 const dateB = checkDateStatus(b[columnName]);
@@ -97,7 +112,7 @@ const Table = ({tableData, editTask}) => {
         'name': 'Status',
         'width': '10%'
     },{
-        'key': 'duedate',
+        'key': 'dueDate',
         'name': 'Due Date',
         'width': '10%'
     },{
@@ -107,7 +122,6 @@ const Table = ({tableData, editTask}) => {
     }];
     useEffect(() => {
         const check = () => {
-            console.log(tableData)
             setData(tableData);
         };
         check();
@@ -166,7 +180,7 @@ const Table = ({tableData, editTask}) => {
                                                         )
                                                     }
                                                     {
-                                                        (auto.key==='duedate') && (
+                                                        (auto.key==='dueDate') && (
                                                             <div style={{color: getColor(item[auto.key], item), fontSize: (window.innerWidth < 760) ? "12px" : "17px"}}>
                                                                 {item[auto.key]}
                                                             </div>

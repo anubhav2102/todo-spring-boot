@@ -1,62 +1,76 @@
 package com.example.springboottodoapplication.controllers;
 
-import java.time.Instant;
-import java.time.ZoneId;
+import java.util.List;
 
-import javax.validation.Valid;
-
-import com.example.springboottodoapplication.models.TodoItem;
-import com.example.springboottodoapplication.repositories.TodoItemRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.example.springboottodoapplication.models.TodoItem;
+import com.example.springboottodoapplication.services.TodoItemService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class TodoItemController {
-    private final Logger logger = LoggerFactory.getLogger(TodoItemController.class);
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
+    private final TodoItemService todoItemService;
 
     @Autowired
-    private TodoItemRepository todoItemRepository;
 
-    @GetMapping("/")
-    public ModelAndView index() {
-        logger.info("request to GET index");
-        ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("todoItems", todoItemRepository.findAll());
-        modelAndView.addObject("today", Instant.now().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek());
-        return modelAndView;
+    private final ObjectMapper objectMapper;
+
+    public TodoItemController(TodoItemService todoItemService, ObjectMapper objectMapper) {
+        this.todoItemService = todoItemService;
+        this.objectMapper = objectMapper;
     }
 
-    @PostMapping("/todo")
-    public String createTodoItem(@Valid TodoItem todoItem, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "add-todo-item";
+    @PostMapping("/api/create-task")
+    public ResponseEntity<TodoItem> createTodoItem(@RequestBody String requestBody) {
+        try {
+            TodoItem todoItem = objectMapper.readValue(requestBody, TodoItem.class);
+            TodoItem savedTodoItem = todoItemService.createTodoItem(todoItem);
+            return new ResponseEntity<>(savedTodoItem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        todoItem.setCreatedDate(Instant.now());
-        todoItem.setModifiedDate(Instant.now());
-        todoItemRepository.save(todoItem);
-        return "redirect:/";
     }
-
-    @PostMapping("/todo/{id}")
-    public String updateTodoItem(@PathVariable("id") long id, @Valid TodoItem todoItem, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            todoItem.setId(id);
-            return "update-todo-item";
+    @GetMapping("/api/all-tasks")
+    public List<TodoItem> getAllTodoItems() {
+        return todoItemService.getAllTodoItems();
+    }
+    @PutMapping("/api/update-task/{id}")
+    public ResponseEntity<TodoItem> updateTodoItem(@PathVariable Long id, @RequestBody TodoItem updatedTodoItem) {
+        TodoItem existingTodoItem = todoItemService.getTodoItemById(id);
+        if (existingTodoItem == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        todoItem.setModifiedDate(Instant.now());
-        todoItemRepository.save(todoItem);
-        return "redirect:/";
+        existingTodoItem.setTask(updatedTodoItem.getTask());
+        existingTodoItem.setDescription(updatedTodoItem.getDescription());
+        existingTodoItem.setStatus(updatedTodoItem.getStatus());
+        existingTodoItem.setDueDate(updatedTodoItem.getDueDate());
+        TodoItem savedTodoItem = todoItemService.updateTodoItem(existingTodoItem);
+        return new ResponseEntity<>(savedTodoItem, HttpStatus.OK);
     }
 
+    @DeleteMapping("/api/delete-task/{id}")
+    public ResponseEntity<Void> deleteTodoItem(@PathVariable Long id) {
+        if (!todoItemService.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        todoItemService.deleteTodoItemById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

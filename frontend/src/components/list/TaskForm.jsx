@@ -16,13 +16,14 @@ const TaskForm = ({closeCreateTaskModal, savingData, updateTask}) => {
         let obj = {
             'title': title,
             'description': description,
-            'duedate': duedate
+            'dueDate': duedate
         };
         console.log(updateTask)
-        if(updateTask.duedate){
+        if(updateTask.dueDate){
             console.log(updateTask)
             obj['updated'] = true;
             obj['index'] = updateTask.index;
+            obj['id'] = updateTask.id;
         }
         savingData(obj);
         handleClose();
@@ -32,9 +33,9 @@ const TaskForm = ({closeCreateTaskModal, savingData, updateTask}) => {
             console.log(updateTask)
             setTitle(updateTask.task);
             setDescription(updateTask.description);
-            console.log(updateTask.duedate);
-            if(updateTask.duedate){
-                const dateString = updateTask.duedate;
+            console.log(updateTask.dueDate);
+            if(updateTask.dueDate){
+                const dateString = updateTask.dueDate;
                 const [day, month, year] = dateString.split('/').map(Number);
 
                 const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;

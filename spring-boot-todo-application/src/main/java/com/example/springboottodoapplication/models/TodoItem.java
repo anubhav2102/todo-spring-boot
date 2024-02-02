@@ -1,58 +1,40 @@
 package com.example.springboottodoapplication.models;
 
-import java.time.Instant;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "todo_item")
 public class TodoItem {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Getter
     @Setter
     private Long id;
 
     @Getter
     @Setter
-    @NotBlank(message = "Description is required")
+    private String task;
+
+    @Getter
+    @Setter
     private String description;
 
     @Getter
     @Setter
-    private boolean complete;
+    private String status;
 
     @Getter
     @Setter
-    private Instant createdDate;
+    private String dueDate;
 
-    @Getter
-    @Setter
-    private Instant modifiedDate;
 
-    public TodoItem() {}
-
-    public TodoItem(String description) {
-        this.description = description;
-        this.complete = false;
-        this.createdDate = Instant.now();
-        this.modifiedDate = Instant.now();
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("TodoItem{id=%d, description='%s', complete='%s', createdDate='%s', modifiedDate='%s'}",
-        id, description, complete, createdDate, modifiedDate);
-    }
-
-    
 }
