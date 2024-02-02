@@ -1,15 +1,35 @@
+# Getting Started with Java Spring Boot App
+
+# Development Instructions
+
+- `git clone https://github.com/wazooinc/spring-boot-todo-application.git`
+- `cd spring-boot-todo-application`
+- open in favorite editor, or
+- `mvnw spring-boot:run`
+- open http://localhost:8080
+
+# Database
+
+Open [http://localhost:8080/h2-console](http://localhost:8080/h2-console/) in browser.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
+Runs the app in the production mode.\
+Open [https://leap-todo.netlify.app/](https://leap-todo.netlify.app/) to view it in your browser.
+
 In the project directory, you can run:
+
+### `cd frontend`
 
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000/](http://localhost:3000/) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
