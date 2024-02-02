@@ -168,7 +168,7 @@ const List = () => {
             {
                 showCreateTask && (
                     <div style={{position: "fixed",height: "100%", width:"100%",background:"rgb(115 111 111 / 50%)", zIndex:9, top:"0",left:"0"}}>
-                        <div style={{position: "fixed", height: (window.innerWidth > 760) ? "35%" : "44%", width: (window.innerWidth > 760) ? "50%" : "85%", borderRadius: "10px", left: (window.innerWidth>760)?"25%":"2%", top: "22%", zIndex: 999, background: "white", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", margin: "10px", padding: "10px"}}>
+                        <div style={{position: "fixed", height: (window.innerWidth > 760) ? "35%" : "48%", width: (window.innerWidth > 760) ? "50%" : "85%", borderRadius: "10px", left: (window.innerWidth>760)?"25%":"2%", top: "22%", zIndex: 999, background: "white", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", margin: "10px", padding: "10px"}}>
                             <CreateTask closeCreateTaskModal={closeCreateTaskModal} savedTask={handleNewTask} updateTask={updateTask} />
                         </div>
                     </div>
