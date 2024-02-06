@@ -2,7 +2,7 @@
 
 # Development Instructions
 
-- `git clone https://github.com/wazooinc/spring-boot-todo-application.git`
+- `git clone https://github.com/anubhav2102/todo-spring-boot.git`
 - `cd spring-boot-todo-application`
 - open in favorite editor, or
 - `mvnw spring-boot:run`
